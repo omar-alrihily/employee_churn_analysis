@@ -67,22 +67,30 @@ elif choice2 == "Medium":
 elif choice2 == "High":
  salary = "high"
 
-agree1 = st.sidebar.checkbox('Employee had a work accident')
-if agree1:
+choice3 = st.sidebar.radio('promotion_last_5years', ["Yes", "No"])
+if choice3 == "Yes":
         promotion_last_5years = 1
 else:
         promotion_last_5years = 0
+
+choice4 = st.sidebar.radio('Work_accident', ["Yes", "No"])
+if choice4 == "Yes":
+        Work_accident = 1
+else:
+        Work_accident = 0
+
+satisfaction_level = st.sidebar.slider("What was the overall satisfaction level of the employee", 0.0, 1.0, 0.5)
         
-average_montly_hours = st.sidebar.slider("Enter average monthly hours worked by the employee", 0, 500, 250)
+average_montly_hours = st.sidebar.slider("Enter average monthly hours worked by the employee", 0, 240, 120)
 
 last_evaluation = st.sidebar.slider("What was the score of the employee in the last evaluation?", 0.0, 1.0, 0.5)
-number_project = st.sidebar.slider("Enter number of projects the employee is currently working on", 0, 50, 10)
+number_project = st.sidebar.slider("Enter number of projects the employee is currently working on", 0, 20, 10)
 #promotion_last_5years = st.radio("Has the employee been promoted recently?", (1, 0))
 
 
 #salary = st.radio("Choose salary range of the employee", ("high", "medium", "low"))
-satisfaction_level = st.sidebar.slider("What was the overall satisfaction level of the employee", 0.0, 1.0, 0.5)
-time_spend_company = st.sidebar.slider("Enter employee tenure at the organization (in years)", 0, 60, 5)
+
+time_spend_company = st.sidebar.slider("Enter employee tenure at the organization (in years)", 0, 30, 1)
 
 
     
@@ -94,15 +102,17 @@ my_dict = {
     	"average_montly_hours": average_montly_hours,
 	"time_spend_company": time_spend_company,
 	"promotion_last_5years": promotion_last_5years,
-    "Departments": Departments,
-    "salary" : salary
+    "Departments ": Departments,
+    "salary" : salary,
+    "Work_accident":Work_accident
 
 }
 
 
 
-columns = pickle.load(open("columns", 'rb'))
-model = pickle.load(open("model_rf","rb"))
+columns = pickle.load(open("columns2", 'rb'))
+model = pickle.load(open("KNN_Model","rb"))
+
 
 #final_scale = pickle.load(open("cluster_features_scaled", 'rb'))
 
@@ -114,13 +124,21 @@ st.markdown("""<h3 style='text-align:left; color:#000;'>Your Selected</h3>
 """, unsafe_allow_html=True)
 st.write(df)
 
+
+
+
+
 #evaluation
 if st.button("Predict", type="primary"):
     pred = model.predict(df)
+    
     if pred==0:
      st.error("It looks like s/he is leaving. ")
+     
+     
     else:
      st.success("It looks like s/he Will Stay")
+
     
    
 
